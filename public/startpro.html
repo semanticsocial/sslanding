@@ -6,6 +6,8 @@
 <!--PROOF PIXEL--><script src="https://cdn.useproof.com/proof.js?acc=c7jCDiBkecSod6bmDKPfctZb3Hv1" async></script><!--END PROOF PIXEL-->
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114581832-1"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -153,8 +155,14 @@
 
         var leads = firebase.database().ref("leads");
 
+        function validateEmail(email) {
+          var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return re.test(email);
+        }
+
         $("#leadform").submit(function(config) { $(this), console.log("Submit data");
 
+      if (validateEmail($("#EMAIL").val()) && $("#IGHANDLE").val().length > 2) {
 
         var c = $("#EMAIL").val(),
             d = $("#IGHANDLE").val(),
@@ -188,7 +196,14 @@
             }
           }),
 
-          !1 })
+          !1 
+          }else{
+            swal("Error", "El correo o el username no son validos", "error", {
+              button: "Ok",
+            });
+          }
+          return false;
+          })
 
       });
     </script>

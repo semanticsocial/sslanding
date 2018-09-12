@@ -7,6 +7,8 @@
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-114581832-1"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -271,9 +273,14 @@
 
         var leads = firebase.database().ref("leads");
 
+        function validateEmail(email) {
+          var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return re.test(email);
+        }
+
         $("#leadform").submit(function(config) { $(this), console.log("Submit data");
 
-
+      if (validateEmail($("#EMAIL").val()) && $("#IGHANDLE").val().length > 2) {
         var c = $("#EMAIL").val(),
             d = $("#IGHANDLE").val(),
             e = $("#PLAN").val(),
@@ -299,6 +306,8 @@
 
           return leads.push(f).then(function(config) {
             if (config) {
+              //            window.location.assign("https://www.sandbox.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=C2QEP6Y9BZSSY&custom="+landingData);
+
             window.location.assign("https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=SAE98PUP7C2HS&custom="+landingData);
             } else {
             console.log('error')
@@ -306,7 +315,14 @@
             }
           }),
 
-          !1 })
+          !1 
+      }else{
+        swal("Error", "El correo o el username no son validos", "error", {
+          button: "Ok",
+        });
+      }
+        return false;
+          })
 
       });
     </script>
